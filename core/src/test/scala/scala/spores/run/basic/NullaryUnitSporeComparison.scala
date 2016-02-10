@@ -32,15 +32,15 @@ class NullaryUnitSporeComparison {
   /**
     * same as nestedPTTCapture, but (_: Unit) => ... replaced with Nullary spore
     */
-  @Test
-  def nestedPTTCaptureNullary(): Unit = {
-    val s = spore{
-      delayed {
-        spore {
-          (_: Unit) => ()
-        }
-        ()
-      }
-    }
-  }
+//  @Test
+//  def nestedPTTCaptureNullary(): Unit = {
+//    val s = spore{
+//      delayed {
+//        spore {
+//          (_: Unit) => ()
+//        }
+//        ()
+//      }
+//    }
+//  }
 }

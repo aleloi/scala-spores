@@ -29,7 +29,7 @@ package object spores {
    *  Check that body only accesses x, y, p, and variables local to (owned by) the
    *  closure.
    */
-  def spore[T, R](fun: T => R): Spore[T, R] = macro sporeImpl[T, R]
+  def spore[T, R, A](fun: T => R): Spore[T, R] = macro sporeImpl[T, R]
 
   def spore[T1, T2, R](fun: (T1, T2) => R): Spore2[T1, T2, R] = macro spore2Impl[T1, T2, R]
 
@@ -37,14 +37,16 @@ package object spores {
 
   def spore[R](fun: Function0[R]): NullarySpore[R] = macro nullarySporeImpl[R]
 
-  implicit def mkSpore[T, R](fun: T => R): Spore[T, R] = macro sporeImpl[T, R]
+  implicit def mkSpore[T, R// , A
+  ](fun: T => R): Spore[T, R] // {type Avoided = A}
+  = macro sporeImpl[T, R]
 
   def delayed[T](body: T): Function0[T] = new Function0[T] {
     def apply(): T = body
   }
 
   // TOGGLE DEBUGGING
-  private val isDebugEnabled = System.getProperty("spores.debug", "false").toBoolean
+  private val isDebugEnabled = true // System.getProperty("spores.debug", "false").toBoolean
   private[spores] def debug(s: => String): Unit =
     if (isDebugEnabled) println(s)
 
@@ -54,15 +56,18 @@ package object spores {
     c.Expr[NullarySpore[R]](tree)
   }
 
-  def sporeImpl[T: c.WeakTypeTag, R: c.WeakTypeTag](c: Context)(fun: c.Expr[T => R]): c.Expr[Spore[T, R]] = {
+  def sporeImpl[T: c.WeakTypeTag, R: c.WeakTypeTag//, A: c.WeakTypeTag
+  ](c: Context)(fun: c.Expr[T => R]): c.Expr[Spore[T, R] ] = {
     import c.universe._
 
     // check Spore constraints
     // TODO: the last 2 arguments could be passed implicitly
     val impl = new MacroImpl[c.type](c)
-    val tree = impl.check(fun.tree, weakTypeOf[T], weakTypeOf[R])
-
-    c.Expr[Spore[T, R]](tree)
+    val tree = impl.check(fun.tree, weakTypeOf[T], weakTypeOf[R]
+    )
+    //c.typecheck(tree)
+    //debug(s"SPORES, RESULT: tree=\n${tree}")
+    reify(c.Expr[Spore[T, R]](tree).splice)
   }
 
   def spore2Impl[T1: c.WeakTypeTag, T2: c.WeakTypeTag, R: c.WeakTypeTag](c: Context)(fun: c.Expr[(T1, T2) => R]): c.Expr[Spore2[T1, T2, R]] = {
@@ -97,13 +102,13 @@ package object spores {
             case vd @ ValDef(mods, name, tpt, rhs) =>
               List(vd.symbol -> tpt.tpe)
             case td @ TypeDef(mods, name, tparams, rhs) =>
-              println(s"found type def $name with rhs: $rhs")
+              debug(s"found type def $name with rhs: $rhs")
               if (name.toString == "Constraint") {
                 rhs match {
                   case tpt @ TypeTree() =>
-                    println(s"found TypeTree, tpe: ${tpt.tpe}")
+                    debug(s"found TypeTree, tpe: ${tpt.tpe}")
                   case _ =>
-                    println(s"rhs is something else: ${rhs.getClass}")
+                    debug(s"rhs is something else: ${rhs.getClass}")
                 }
               }
               List()
@@ -170,7 +175,7 @@ package object spores {
 
     // check Spore constraints
     val tpes = checkTc(c)(fun.tree)
-    println("captured types: " + tpes)
+    debug("captured types: " + tpes)
 
     reify {
       val f = fun.splice

@@ -100,7 +100,12 @@ object SporePickler extends SimpleSporePicklerImpl {
           val tag3 = reader3.beginEntry()
           val result3 = capturedUnpickler.unpickle(tag3, reader3)
           reader3.endEntry()
-          sporeInst.captured = result3.asInstanceOf[sporeInst.Captured]
+
+          val capturedValField = clazz.getDeclaredField("captured")
+          capturedValField.setAccessible(true)
+          capturedValField.set(sporeInst, result3.asInstanceOf[sporeInst.Captured])
+
+          //sporeInst.captured = result3.asInstanceOf[sporeInst.Captured]
 
           sporeInst
         }
@@ -256,7 +261,12 @@ object SporePickler extends SimpleSporePicklerImpl {
           val tag3 = reader3.beginEntry()
           val result3 = capturedUnpickler.unpickle(tag3, reader3)
           reader3.endEntry()
-          sporeInst.captured = result3.asInstanceOf[sporeInst.Captured]
+
+          val capturedValField = clazz.getDeclaredField("captured")
+          capturedValField.setAccessible(true)
+          capturedValField.set(sporeInst, result3.asInstanceOf[sporeInst.Captured])
+
+          //sporeInst.captured = result3.asInstanceOf[sporeInst.Captured]
 
           sporeInst
         }
@@ -429,7 +439,11 @@ object SporePickler extends SimpleSporePicklerImpl {
               }
             }
             reader3.endEntry()
-            sporeWithEnvInst.captured = value.asInstanceOf[sporeWithEnvInst.Captured]
+            val capturedValField = clazz.getDeclaredField("captured")
+            capturedValField.setAccessible(true)
+            capturedValField.set(sporeWithEnvInst, value.asInstanceOf[sporeWithEnvInst.Captured])
+
+            //sporeWithEnvInst.captured = value.asInstanceOf[sporeWithEnvInst.Captured]
           }
 
           sporeInst
@@ -486,7 +500,11 @@ object SporePickler extends SimpleSporePicklerImpl {
               }
             }
             reader3.endEntry()
-            sporeWithEnvInst.captured = value.asInstanceOf[sporeWithEnvInst.Captured]
+            val capturedValField = clazz.getDeclaredField("captured")
+            capturedValField.setAccessible(true)
+            capturedValField.set(sporeWithEnvInst, value.asInstanceOf[sporeWithEnvInst.Captured])
+
+            //sporeWithEnvInst.captured = value.asInstanceOf[sporeWithEnvInst.Captured]
           }
 
           sporeInst
@@ -548,7 +566,11 @@ object SporePickler extends SimpleSporePicklerImpl {
             }
           }
           reader3.endEntry()
-          sporeInst.captured = value.asInstanceOf[sporeInst.Captured]
+          val capturedValField = clazz.getDeclaredField("captured")
+          capturedValField.setAccessible(true)
+          capturedValField.set(sporeInst, value.asInstanceOf[sporeInst.Captured])
+
+         //sporeInst.captured = value.asInstanceOf[sporeInst.Captured]
           sporeInst
         }
       }
@@ -613,7 +635,11 @@ object SporePickler extends SimpleSporePicklerImpl {
             }
           }
           reader3.endEntry()
-          sporeInst.captured = value.asInstanceOf[sporeInst.Captured]
+          val capturedValField = clazz.getDeclaredField("captured")
+          capturedValField.setAccessible(true)
+          capturedValField.set(sporeInst, value.asInstanceOf[sporeInst.Captured])
+
+          //sporeInst.captured = value.asInstanceOf[sporeInst.Captured]
           sporeInst
         }
       }
@@ -669,7 +695,10 @@ object SporePickler extends SimpleSporePicklerImpl {
               }
             }
             reader3.endEntry()
-            sporeWithEnvInst.captured = value.asInstanceOf[sporeWithEnvInst.Captured]
+            val capturedValField = clazz.getDeclaredField("captured")
+            capturedValField.setAccessible(true)
+            capturedValField.set(sporeWithEnvInst, value.asInstanceOf[sporeWithEnvInst.Captured])
+            //sporeWithEnvInst.captured = value.asInstanceOf[sporeWithEnvInst.Captured]
           }
 
           sporeInst

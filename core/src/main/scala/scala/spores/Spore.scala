@@ -33,7 +33,7 @@ trait NullarySporeWithEnv[+R] extends NullarySpore[R] {
    *  If the Spore captures multiple variables, this field
    *  stores a tuple.
    */
-  var captured: Captured = _
+  val captured: Captured //= _
 
 }
 
@@ -62,7 +62,7 @@ trait SporeWithEnv[-T, +R] extends Spore[T, R] {
    *  If the Spore captures multiple variables, this field
    *  stores a tuple.
    */
-  var captured: Captured = _
+  val captured: Captured // = _
 
 }
 
@@ -91,7 +91,7 @@ trait Spore2WithEnv[-T1, -T2, +R] extends Spore2[T1, T2, R] {
    *  If the Spore captures multiple variables, this field
    *  stores a tuple.
    */
-  var captured: Captured = _
+  val captured: Captured // = _
 
 }
 
@@ -120,23 +120,28 @@ trait Spore3WithEnv[-T1, -T2, -T3, +R] extends Spore3[T1, T2, T3, R] {
    *  If the Spore captures multiple variables, this field
    *  stores a tuple.
    */
-  var captured: Captured = _
+  val captured: Captured // = _
 
 }
 
-class NullarySporeImpl[+R](val f: () => R) extends NullarySpore[R] {
-  def apply(): R = f()
+// class NullarySporeImpl[+R](val f: () => R) extends NullarySpore[R] {
+//   def apply(): R = f()
+// }
+
+// class SporeImpl[-T, +R](val f: T => R) extends Spore[T, R] {
+//   def apply(x: T): R = f(x)
+//   override def className = "SporeImpl"
+// }
+
+// class Spore2Impl[-T1, -T2, +R](val f: (T1, T2) => R) extends Spore2[T1, T2, R] {
+//   def apply(x1: T1, x2: T2): R = f(x1, x2)
+// }
+
+// class Spore3Impl[-T1, -T2, -T3, +R](val f: (T1, T2, T3) => R) extends Spore3[T1, T2, T3, R] {
+//   def apply(x1: T1, x2: T2, x3: T3): R = f(x1, x2, x3)
+// }
+
+trait No[-A] {
+  //type Excluded = A
 }
 
-class SporeImpl[-T, +R](val f: T => R) extends Spore[T, R] {
-  def apply(x: T): R = f(x)
-  override def className = "SporeImpl"
-}
-
-class Spore2Impl[-T1, -T2, +R](val f: (T1, T2) => R) extends Spore2[T1, T2, R] {
-  def apply(x1: T1, x2: T2): R = f(x1, x2)
-}
-
-class Spore3Impl[-T1, -T2, -T3, +R](val f: (T1, T2, T3) => R) extends Spore3[T1, T2, T3, R] {
-  def apply(x1: T1, x2: T2, x3: T3): R = f(x1, x2, x3)
-}
